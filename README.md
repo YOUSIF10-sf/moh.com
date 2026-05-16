@@ -1,58 +1,64 @@
-# 🔬 وضح يااا المخزن الصح - Smart Warehouse (M-Store)
-### The Scientific & Intelligent ERP Management System
+# Smart Warehouse Management System 🚀
 
-![Version](https://img.shields.io/badge/version-3.0.0-purple)
-![Security](https://img.shields.io/badge/Security-RBAC--Hardened-green)
-![Cloud](https://img.shields.io/badge/Cloud-Turso--Powered-blue)
-![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web-black)
+نظام متكامل لإدارة المستودعات والمخازن الذكية، مصمم باستخدام **Expo** و **React Native** مع دعم كامل لكل من **Android**, **iOS**, و **Web**. يتميز النظام بواجهة عصرية احترافية ونظام أمان متقدم.
 
-**M-Store** is a high-performance, scientific-themed warehouse management system designed with a "Wow" factor. It utilizes a unified cloud database (Turso) to sync states between Web and Mobile in real-time, providing an elite experience for Admins, Supervisors, and Employees.
+## ✨ المميزات الرئيسية
 
----
+- **واجهة مستخدم عصرية (Premium UI):** تصميم Split-Screen للويب و Floating Cards للجوال مع تأثيرات إضاءة خافتة.
+- **إدارة الجلسات الذكية:** تسجيل خروج تلقائي بعد 10 دقائق من عدم النشاط لحماية البيانات.
+- **التوافق الكامل:** تجربة مستخدم مخصصة لكل منصة (ويب وجوال).
+- **قاعدة بيانات سحابية:** التكامل مع **Turso (LibSQL)** لضمان سرعة البيانات وتزامنها.
+- **نظام إشعارات (Toasts):** نظام تنبيهات مدمج لإعلام المستخدمين بالنجاح أو الفشل.
+- **إدارة المنتجات:** إضافة، تعديل، وسحب الكميات مع سجل كامل للعمليات (Logs).
 
-## 🌟 Elite Features
+## 🛠️ التقنيات المستخدمة
 
-- **🪄 Magic Glow Branding**: A "Scientific Dashboard" experience with custom "وضح يااا المخزن الصح" multi-color branding and lighting effects.
-- **🛡️ Multi-Step Account Recovery**: Advanced security flow allowing users to recover passwords via personalized security questions.
-- **📊 Scientific Analytics**: Real-time intelligence hubs with dynamic metrics, health indicators, and warehouse health scores.
-- **🔑 Professional RBAC**: Deeply integrated Role-Based Access Control:
-  - **Admin**: Full control over users, inventory, and strategic analytics.
-  - **Supervisor**: Management of products and operational approvals.
-  - **Employee**: Streamlined "Field Operation" view for withdrawals and stock checks.
-- **📱 Floating Island Navigation**: A modern, micro-minimalist floating tab bar optimized for one-handed mobile use.
-- **☁️ Turso Cloud Sync**: Global database synchronization ensuring the Web and Mobile apps are always in perfect harmony.
+- **Framework:** [Expo SDK 54](https://expo.dev/)
+- **Database:** [Turso / LibSQL](https://turso.tech/)
+- **State Management:** React Context API
+- **Icons:** [Lucide React Native](https://lucide.dev/)
+- **Styling:** Vanilla CSS-in-JS (StyleSheet)
+- **Deployment:** Vercel (Web) / EAS Build (Android/iOS)
 
-## 🛠️ High-Performance Stack
+## 🚀 البدء في التشغيل
 
-- **Core**: React Native / Expo Router (v54+)
-- **Database**: Turso (LibSQL) for ultra-low latency edge data.
-- **Icons**: Lucide-React-Native (Micro-sized for premium feel).
-- **Styling**: Modern Neumorphism / Glassmorphism with Vanilla CSS.
-- **Deployment**: Vercel-optimized for Web, EAS-ready for Mobile.
+### 1. المتطلبات
+تأكد من تثبيت [Node.js](https://nodejs.org/) و [Git].
 
-## 🚀 Entrepreneur's Quick Start
-
-### 1. Configure Environment
-Create a `.env` file in the root directory:
-```env
-EXPO_PUBLIC_DATABASE_URL="libsql://your-db-url.turso.io"
-EXPO_PUBLIC_DATABASE_TOKEN="your-secure-token"
-```
-
-### 2. Launch Development
+### 2. التثبيت
 ```bash
+# استنساخ المشروع
+git clone https://github.com/your-username/smart-warehouse.git
+
+# الانتقال للمجلد
+cd smart-warehouse
+
+# تثبيت المكتبات
 npm install
-npm start
-# Press 'w' for Web, or scan QR for Mobile
 ```
 
-### 3. Vercel Deployment (Web)
-This project is pre-configured with `vercel.json` for seamless SPA routing. Simply connect your GitHub repo to Vercel and set the environment variables in the Vercel dashboard.
+### 3. إعداد البيئة
+قم بإنشاء ملف `.env` في المجلد الرئيسي وأضف البيانات التالية:
+```env
+EXPO_PUBLIC_DATABASE_URL=your_turso_url
+EXPO_PUBLIC_DATABASE_TOKEN=your_turso_token
+```
 
-## 🔐 Security Standards
-- **Zero-Trust UI**: Components automatically hide/show based on encrypted role payloads.
-- **SHA-256 Hashing**: All passwords are encrypted locally before transmission.
-- **Protected Redirection**: Real-time route gating to prevent unauthorized access.
+### 4. التشغيل
+```bash
+# تشغيل التطبيق
+npm start
+
+# تشغيل نسخة الويب
+npm run web
+```
+
+## 📂 هيكلة المشروع
+- `app/`: صفحات التطبيق ونظام التوجيه (Expo Router).
+- `components/`: المكونات القابلة لإعادة الاستخدام.
+- `services/`: خدمات البيانات والاتصال بقاعدة البيانات.
+- `context/`: إدارة الحالة العالمية (Auth, Toasts, Cache).
+- `assets/`: الصور، الخطوط، والوسائط.
 
 ---
-*Designed & Developed with Scientific Precision by Antigravity AI.*
+تم التطوير بواسطة **Smart Store Team** 💻✨

@@ -4,6 +4,7 @@
  * الجلسة مخزنة محلياً في AsyncStorage (خفيفة وبدون اتصال).
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import { db } from './db';
 
 // ─── Hash ────────────────────────────────────────────────────────────────────
@@ -158,6 +159,7 @@ export const StorageService = {
     if (res.rows.length > 0) {
       const user = res.rows[0] as unknown as User;
       await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(user));
+      if (Platform.OS === 'web') (window as any).__IS_WEB_SESSION = true;
       return user;
     }
 
@@ -172,6 +174,7 @@ export const StorageService = {
       // Upgrade to hashed password
       await db.execute({ sql: 'UPDATE users SET password = ? WHERE id = ?', args: [hashed, user.id] });
       await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(user));
+      if (Platform.OS === 'web') (window as any).__IS_WEB_SESSION = true;
       return user;
     }
 
@@ -179,6 +182,9 @@ export const StorageService = {
   },
 
   getSession: async (): Promise<User | null> => {
+    if (Platform.OS === 'web' && !(window as any).__IS_WEB_SESSION) {
+      return null;
+    }
     const raw = await AsyncStorage.getItem(SESSION_KEY);
     return raw ? (JSON.parse(raw) as User) : null;
   },
@@ -407,6 +413,7 @@ export const StorageService = {
 
     const user = res.rows[0] as unknown as User;
     await AsyncStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    if (Platform.OS === 'web') (window as any).__IS_WEB_SESSION = true;
     return user;
   },
 
