@@ -15,9 +15,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator, Platform, StyleSheet, Text,
-  TouchableOpacity, View,
+  TouchableOpacity, View, Animated
 } from 'react-native';
-import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { ProfileMenu } from '@/components/profile-menu';
 
 const isWeb = Platform.OS === 'web';
@@ -179,8 +178,6 @@ export default function TabLayout() {
         {/* Sidebar (Web only) */}
         {isWeb && sidebarVisible && (
           <Animated.View
-            entering={FadeInRight.duration(280).springify()}
-            exiting={FadeOutRight.duration(200)}
             style={{ width: 280, height: '100%', zIndex: 50 }}
           >
             <WebSidebar
@@ -231,8 +228,6 @@ export default function TabLayout() {
                 onPress={() => setMobileSidebarVisible(false)}
               />
               <Animated.View
-                entering={FadeInRight.duration(200).springify()}
-                exiting={FadeOutRight.duration(150)}
                 style={{ position: 'absolute', right: 0, top: 0, bottom: 0, zIndex: 1000 }}
               >
                 <MobileSideBar pathname={pathname} hasAdminAccess={hasAdminAccess} onClose={() => setMobileSidebarVisible(false)} />

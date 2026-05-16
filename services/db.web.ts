@@ -11,7 +11,7 @@ if (!DATABASE_URL || !DATABASE_TOKEN) {
   console.error('[Turso] ⚠️  EXPO_PUBLIC_DATABASE_URL أو EXPO_PUBLIC_DATABASE_TOKEN مفقود من ملف .env');
 }
 
-export const db = createClient({
+export const db = (DATABASE_URL && DATABASE_TOKEN) ? createClient({
   url:       DATABASE_URL,
   authToken: DATABASE_TOKEN,
-});
+}) : null as any;
