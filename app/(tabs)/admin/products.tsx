@@ -247,7 +247,7 @@ export default function ProfessionalProductSpreadsheet() {
                <Plus size={18} color="#fff" strokeWidth={2.5} />
                <Text style={styles.addBtnText}>إضافة صنف</Text>
             </TouchableOpacity>
-            <View style={styles.headerRow}>
+            <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
               <View style={styles.titleBox}>
                 <Text style={styles.headerTitle}>إدارة المنتجات</Text>
                 <Text style={styles.headerSubtitle}>تحكم كامل في أصناف المخزن</Text>

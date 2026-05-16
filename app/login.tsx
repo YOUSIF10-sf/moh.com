@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { Colors } from '../constants/theme';
 import { getApiClient } from '../services/api';
+import { useAuth } from '@/hooks/use-auth';
 
 const isWeb = Platform.OS === 'web';
 
@@ -37,6 +38,8 @@ export default function LoginScreen() {
   const [newPassword, setNewPassword] = useState('');
   const [isRecovering, setIsRecovering] = useState(false);
 
+  const { refreshUser } = useAuth();
+  
   const handleLogin = async () => {
     const cleanUsername = username.trim();
     const cleanPassword = password.trim();
@@ -53,6 +56,7 @@ export default function LoginScreen() {
         username: cleanUsername,
         password: cleanPassword
       });
+      await refreshUser();
       router.replace('/');
     } catch (err: any) {
       const msg = err.response?.data?.message || 'بيانات الدخول غير صحيحة';
@@ -70,7 +74,7 @@ export default function LoginScreen() {
       if (recoveryStep === 1) {
         if (!recoveryUser.trim()) throw new Error('يرجى إدخال اسم المستخدم');
         const res = await api.post('/api/recover/verify-user', { username: recoveryUser.trim() });
-        setRecoveryQuestion(res.data.security_question);
+        setRecoveryQuestion((res.data as any).security_question);
         setRecoveryStep(2);
       } else if (recoveryStep === 2) {
         if (!recoveryAnswer.trim()) throw new Error('يرجى إدخال الإجابة');

@@ -1,52 +1,51 @@
 import { Stack, router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { initStorage } from '@/services/storage';
-import { useAuth } from '@/hooks/use-auth';
-import { View, ActivityIndicator, Platform } from 'react-native';
+import { View, ActivityIndicator, I18nManager } from 'react-native';
 import { Colors } from '@/constants/theme';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { AppProvider, useUser } from '@/context/AppContext';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent React Native from automatically mirroring layouts on Arabic devices
+// because we already manually handle RTL using 'row-reverse'.
+try {
+  I18nManager.allowRTL(false);
+  I18nManager.forceRTL(false);
+} catch (e) {}
+
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const { user, loading: authLoading } = useAuth();
+// ─── Inner navigator (reads from AppContext) ──────────────────────────────────
+
+function RootNavigator() {
+  const { user, loading: authLoading } = useUser();
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
-        // 1. Load Fonts
         await Font.loadAsync({
-          'Cairo': require('../assets/fonts/Cairo-Regular.ttf'),
-          'CairoBold': require('../assets/fonts/Cairo-Bold.ttf'),
+          'Cairo':          require('../assets/fonts/Cairo-Regular.ttf'),
+          'CairoBold':      require('../assets/fonts/Cairo-Bold.ttf'),
           'CairoExtraBold': require('../assets/fonts/Cairo-ExtraBold.ttf'),
         });
-
-        // 2. Initialize Database
         await initStorage();
-        
-        // Artifical delay for smooth transition
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 400));
       } catch (e) {
-        console.warn('Initialization Error:', e);
+        console.warn('[App] Initialization warning:', e);
       } finally {
         setAppIsReady(true);
         await SplashScreen.hideAsync();
       }
     }
-
     prepare();
   }, []);
 
   useEffect(() => {
     if (appIsReady && !authLoading) {
-      if (!user) {
-        router.replace('/login');
-      } else {
-        router.replace('/(tabs)');
-      }
+      router.replace(user ? '/(tabs)' : '/login');
     }
   }, [user, authLoading, appIsReady]);
 
@@ -60,8 +59,20 @@ export default function RootLayout() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="login" options={{ headerShown: false, animation: 'fade' }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade' }} />
+      <Stack.Screen name="login" options={{ animation: 'fade' }} />
+      <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
     </Stack>
+  );
+}
+
+// ─── Root — wraps everything in Context + Error Boundary ─────────────────────
+
+export default function RootLayout() {
+  return (
+    <ErrorBoundary>
+      <AppProvider>
+        <RootNavigator />
+      </AppProvider>
+    </ErrorBoundary>
   );
 }

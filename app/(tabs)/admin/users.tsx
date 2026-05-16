@@ -259,7 +259,7 @@ export default function ProfessionalUserSpreadsheet() {
               <Plus size={18} color="#fff" />
               <Text style={styles.addBtnText}>إضافة مستخدم</Text>
             </TouchableOpacity>
-            <View style={styles.headerRow}>
+            <View style={{ flexDirection: 'row-reverse', alignItems: 'center' }}>
             </View>
             <View style={styles.titleBox}>
               <Text style={styles.headerTitle}>شؤون الموظفين</Text>

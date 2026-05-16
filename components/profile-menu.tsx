@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.2, 
     borderColor: '#eee', 
     fontSize: 13,
-    outlineStyle: 'none',
+    ...(Platform.OS === 'web' ? { outlineStyle: 'none' as any } : {}),
   },
   inputFocused: {
     borderColor: '#1d1d1f',

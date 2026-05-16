@@ -1,8 +1,8 @@
 /**
- * db.ts — Native Platform (iOS / Android)
- * يستخدم @libsql/client/http للاتصال عبر HTTP.
+ * db.ts — Web Platform
+ * يستخدم @libsql/client/web للمتصفح (WebSockets/HTTP).
  */
-import { createClient } from '@libsql/client/http';
+import { createClient } from '@libsql/client/web';
 
 const DATABASE_URL   = process.env.EXPO_PUBLIC_DATABASE_URL   ?? '';
 const DATABASE_TOKEN = process.env.EXPO_PUBLIC_DATABASE_TOKEN ?? '';

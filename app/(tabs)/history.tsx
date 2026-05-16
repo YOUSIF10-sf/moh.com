@@ -1,60 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   RefreshControl,
-  Alert,
   Dimensions,
   Platform,
 } from 'react-native';
-import { Printer, Calendar, Hash, FileText, Info, ChevronLeft } from 'lucide-react-native';
+import { Calendar, FileText, Hash, Info, Printer } from 'lucide-react-native';
 import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
 import { Colors } from '@/constants/theme';
-import { getApiClient } from '@/services/api';
+import { StorageService, type Log } from '@/services/storage';
+import { useToast } from '@/context/AppContext';
+import { LogCardSkeleton } from '@/components/Skeleton';
+import { useFocusEffect } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 const isWeb = Platform.OS === 'web';
 
-interface LogEntry {
-  id: number;
-  created_at: string;
-  product_name: string;
-  quantity: number;
-  note: string;
-  employee_name: string;
-}
+type LogEntry = Log;
 
 export default function UnifiedHistoryScreen() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const showToast = useToast();
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     try {
-      const api = await getApiClient();
-      const response = await api.get('/api/logs/user'); 
-      setLogs(response.data as LogEntry[]);
-    } catch (error) {
-      console.error('Failed to fetch logs:', error);
+      const session = await StorageService.getSession();
+      const data = await StorageService.getLogs(session?.username || '');
+      setLogs(data);
+    } catch (e: any) {
+      showToast(e.message || 'فشل تحميل السجلات', 'error');
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [showToast]);
 
-  useEffect(() => {
-    fetchLogs();
-  }, []);
+  useFocusEffect(useCallback(() => { fetchLogs(); }, [fetchLogs]));
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchLogs();
-  };
+  }, [fetchLogs]);
 
   const printReceipt = async (log: LogEntry) => {
     const style = `
@@ -276,8 +268,16 @@ export default function UnifiedHistoryScreen() {
 
   if (loading && !refreshing) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+      <View style={styles.container}>
+        <View style={styles.maxContainer}>
+          <View style={styles.header}>
+            <Text style={styles.headerSubtitle}>السجل الشخصي</Text>
+            <Text style={styles.headerTitle}>{'تتبع مسحوباتك.\nبكل شفافية.'}</Text>
+          </View>
+          <View style={{ paddingHorizontal: isWeb ? 30 : 20, gap: 16 }}>
+            {[0, 1, 2].map(i => <LogCardSkeleton key={i} />)}
+          </View>
+        </View>
       </View>
     );
   }
