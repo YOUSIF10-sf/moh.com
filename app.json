@@ -26,7 +26,7 @@
       "package": "com.yousiftariq.smartwarehouse"
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/smart-logo.png"
     },
     "plugins": [
